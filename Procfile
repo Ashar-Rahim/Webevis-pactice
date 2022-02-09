@@ -1,1 +1,1 @@
-web: gunicorn image-filtering-api-flask:app
+web: python main.py
