@@ -37,9 +37,9 @@ def image_filtering(img, fil):
     elif fil == 'SHARPEN':
         filter_image = img.filter(ImageFilter.SHARPEN)
     elif fil == 'BRIGHTER':
-        filter_image = img.filter(ImageFilter.MaxFilter(size=2))
+        filter_image = img.filter(ImageFilter.MaxFilter(size=3))
     elif fil == 'DARKER':
-        filter_image = img.filter(ImageFilter.MinFilter(size=2))
+        filter_image = img.filter(ImageFilter.MinFilter(size=3))
     elif fil == 'SMOOTH':
         filter_image = img.filter(ImageFilter.SMOOTH)
     elif fil == 'SMOOTH_MORE':
