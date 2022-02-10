@@ -1,4 +1,3 @@
-
 from flask import Flask, request, jsonify, send_file
 import os
 from PIL import Image, ImageFilter
@@ -62,32 +61,30 @@ def upload_file():
 
     errors = {}
     success = False
-    
-    mydir = os.path.dirname(__file__)
+
     for file in files:
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(mydir + "\\" + app.config['UPLOAD_FOLDER'], filename))
+            file.save(filename)
+
+            user_image = filename
+            new_image = image_filtering(user_image, fil)
+            new_image.save("filtered_" + filename)
+
             success = True
+
+            if success:
+                resp = jsonify({'message': 'Files successfully uploaded'})
+                resp.status_code = 201
+                return send_file("filtered_" + filename)
+            else:
+                resp = jsonify(errors)
+                resp.status_code = 500
+                return resp
 
         else:
             errors[file.filename] = 'File type is not allowed'
 
-    if success and errors:
-        errors['message'] = 'File(s) successfully uploaded'
-        resp = jsonify(errors)
-        resp.status_code = 500
-        return resp
-    if success:
-        resp = jsonify({'message': 'Files successfully uploaded'})
-        resp.status_code = 201
-        return resp
-    else:
-        resp = jsonify(errors)
-        resp.status_code = 500
-        return resp
-
 
 if __name__ == '__main__':
     app.run(debug=True)
-
