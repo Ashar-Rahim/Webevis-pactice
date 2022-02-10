@@ -1,5 +1,4 @@
 from flask import Flask, request, jsonify, send_file
-import os
 from PIL import Image, ImageFilter
 from werkzeug.utils import secure_filename
 from PIL import ImageEnhance
@@ -10,9 +9,6 @@ app = Flask(__name__)
 
 app.secret_key = "Shary_coder_1925"
 
-
-UPLOAD_FOLDER = 'static\\img'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg']
@@ -58,6 +54,8 @@ def upload_file():
 
     files = request.files.getlist('files[]')
     fil = request.form.get('fil')
+    compress = request.form.get('compress')
+    quality = request.form.get('quality')
 
     errors = {}
     success = False
@@ -69,13 +67,21 @@ def upload_file():
 
             user_image = filename
             new_image = image_filtering(user_image, fil)
-            new_image.save("filtered_" + filename)
+            print(compress)
+            if compress == 'true':
+                new_image.save("filtered_" + filename,
+                               optimize=True,
+                               quality=int(quality))
+                pass
+            else:
+                new_image.save("filtered_" + filename)
 
             success = True
 
             if success:
                 resp = jsonify({'message': 'Files successfully uploaded'})
                 resp.status_code = 201
+
                 return send_file("filtered_" + filename)
             else:
                 resp = jsonify(errors)
