@@ -34,6 +34,18 @@ def image_filtering(img, fil):
         filter_image = img.filter(ImageFilter.EDGE_ENHANCE_MORE)
     elif fil == 'FIND_EDGES':
         filter_image = img.filter(ImageFilter.FIND_EDGES)
+    elif fil == 'SHARPEN':
+        filter_image = img.filter(ImageFilter.SHARPEN)
+    elif fil == 'BRIGHTER':
+        filter_image = img.filter(ImageFilter.MaxFilter(size=2))
+    elif fil == 'DARKER':
+        filter_image = img.filter(ImageFilter.MinFilter(size=2))
+    elif fil == 'SMOOTH':
+        filter_image = img.filter(ImageFilter.SMOOTH)
+    elif fil == 'SMOOTH_MORE':
+        filter_image = img.filter(ImageFilter.SMOOTH_MORE)
+    elif fil == 'G_BLUR':
+        filter_image = img.filter(ImageFilter.GaussianBlur)
     else:
         filter_image = img
     return filter_image
