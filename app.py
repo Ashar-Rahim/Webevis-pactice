@@ -11,6 +11,7 @@ app = Flask(__name__)
 
 app.secret_key = "Shary_coder_1925"
 
+
 UPLOAD_FOLDER = 'static\\img'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
@@ -61,12 +62,12 @@ def upload_file():
 
     errors = {}
     success = False
-
+    
+    mydir = os.path.dirname(__file__)
     for file in files:
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            # file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            print(filename)
+            file.save(os.path.join(mydir + "\\" + app.config['UPLOAD_FOLDER'], filename))
             success = True
 
         else:
