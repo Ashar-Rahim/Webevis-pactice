@@ -116,7 +116,7 @@ def compress():
 
             img = Image.open(filename)
             rgb_img = img.convert('RGB')
-            rgb_img.save(r"compressed_img.jpg",
+            rgb_img.save("compressed"+filename,
                          optimize=True,
                          quality=int(quality))
             success = True
@@ -125,7 +125,7 @@ def compress():
                 resp = jsonify({'message': 'Files successfully uploaded'})
                 resp.status_code = 201
 
-                return send_file("compressed_img.jpg")
+                return send_file("compressed"+filename)
             else:
                 resp = jsonify(errors)
                 resp.status_code = 500
