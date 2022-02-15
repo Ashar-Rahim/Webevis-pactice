@@ -80,7 +80,8 @@ def upload_file():
             user_image = filename
             new_image = image_filtering(user_image, fil)
             if compress == 'true':
-                new_image.save("filtered_img.jpg",
+                rgb_img = new_image.convert('RGB')
+                rgb_img.save("filtered_img.jpg",
                                optimize=True,
                                quality=int(quality))
                 pass
