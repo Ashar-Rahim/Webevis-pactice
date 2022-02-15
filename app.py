@@ -116,7 +116,7 @@ def compress():
 
             img = Image.open(filename)
             rgb_img = img.convert('RGB')
-            rgb_img.save("compressed_img.jpg",
+            rgb_img.save(r"compressed_img.jpg",
                          optimize=True,
                          quality=int(quality))
             success = True
