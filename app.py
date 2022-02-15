@@ -66,8 +66,6 @@ def upload_file():
 
     files = request.files.getlist('files[]')
     fil = request.form.get('fil')
-    compress = request.form.get('compress')
-    quality = request.form.get('quality')
 
     errors = {}
     success = False
@@ -79,14 +77,7 @@ def upload_file():
 
             user_image = filename
             new_image = image_filtering(user_image, fil)
-            if compress == 'true':
-                rgb_img = new_image.convert('RGB')
-                rgb_img.save("filtered_img.jpg",
-                               optimize=True,
-                               quality=int(quality))
-                pass
-            else:
-                new_image.save("filtered_img.jpg")
+            new_image.save("filtered"+filename)
 
             success = True
 
@@ -94,7 +85,47 @@ def upload_file():
                 resp = jsonify({'message': 'Files successfully uploaded'})
                 resp.status_code = 201
 
-                return send_file("filtered_img.jpg")
+                return send_file("filtered"+filename)
+            else:
+                resp = jsonify(errors)
+                resp.status_code = 500
+                return resp
+
+        else:
+            errors[file.filename] = 'File type is not allowed'
+
+
+@app.route('/compress', methods=['POST'])
+def compress():
+    # check if the post request has the file part
+    if 'files[]' not in request.files:
+        resp = jsonify({'message': 'No file part in the request'})
+        resp.status_code = 400
+        return resp
+
+    files = request.files.getlist('files[]')
+    quality = request.form.get('quality')
+
+    errors = {}
+    success = False
+
+    for file in files:
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(filename)
+
+            img = Image.open(filename)
+            rgb_img = img.convert('RGB')
+            rgb_img.save("compressed_img.jpg",
+                         optimize=True,
+                         quality=int(quality))
+            success = True
+
+            if success:
+                resp = jsonify({'message': 'Files successfully uploaded'})
+                resp.status_code = 201
+
+                return send_file("compressed_img.jpg")
             else:
                 resp = jsonify(errors)
                 resp.status_code = 500
