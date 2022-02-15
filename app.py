@@ -79,14 +79,13 @@ def upload_file():
 
             user_image = filename
             new_image = image_filtering(user_image, fil)
-            print(compress)
             if compress == 'true':
-                new_image.save("filtered_" + filename,
+                new_image.save("filtered_img.jpg",
                                optimize=True,
                                quality=int(quality))
                 pass
             else:
-                new_image.save("filtered_" + filename)
+                new_image.save("filtered_img.jpg")
 
             success = True
 
@@ -94,7 +93,7 @@ def upload_file():
                 resp = jsonify({'message': 'Files successfully uploaded'})
                 resp.status_code = 201
 
-                return send_file("filtered_" + filename)
+                return send_file("filtered_img.jpg")
             else:
                 resp = jsonify(errors)
                 resp.status_code = 500
